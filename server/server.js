@@ -52,66 +52,94 @@ function parse(url) {
     });
 }
 
-// Return vacancy title
-function extractTitle(html) {
-    const regExp = /<a\sclass="h3 job-list-item__link"[^>][\s\S]*?<\/a>/;
-    let title = html.match(regExp);
-    title = title[0];
-    title = title.slice(title.indexOf('>') + 1);
-    title = title.slice(0, title.indexOf('<'));
-    title = title.slice(14);    // Slice spaces before title
-    
-    return title;
-}
-
-// Return link on vacancy
-function extractLink(html) {
-    const regExp = /<a\sclass="h3 job-list-item__link"[^>][\s\S]*?<\/a>/;
-    let link = html.match(regExp);
-    link = link[0];
-    link = link.slice(0, link.indexOf('>') + 1);
-    link = link.match(/href="[\s\S]*"/);
-    link = link[0];
-    link = link.slice(6, link.length - 1);
-
-    return 'https://djinni.co' + link;
-}
-
-function extractDesc(html) {
-
-}
-
+// Return array of vacancies objects
 function extractVacancies(html) {
-    let vacancies = [];
+    // Return vacancy title
+    function extractTitle(html) {
+        const regExp = /<a\sclass="h3 job-list-item__link"[^>][\s\S]*?<\/a>/;
+        let title = html.match(regExp);
+        title = title[0];
+        title = title.slice(title.indexOf('>') + 1);
+        title = title.slice(0, title.indexOf('<'));
+        title = title.slice(14);    // Slice spaces before title
+        
+        return title;
+    }
+
+    // Return link on vacancy
+    function extractLink(html) {
+        const regExp = /<a\sclass="h3 job-list-item__link"[^>][\s\S]*?<\/a>/;
+        let link = html.match(regExp);
+        link = link[0];
+        link = link.slice(0, link.indexOf('>') + 1);
+        link = link.match(/href="[\s\S]*"/);
+        link = link[0];
+        link = link.slice(6, link.length - 1);
+
+        return 'https://djinni.co' + link;
+    }
+
+    function extractInfo(html) {
+        const regExp = /<div\sclass="job-list-item__job-info font-weight-500">[\s\S]*?<\/div>/;
+        let info = html.match(regExp);
+        info = info[0];   
+        info = info.slice(info.indexOf('>') + 1);   // Cut off div's html
+        info = info.replace(/<\/div>/gi, ''); 
+        info = info.replace(/<span[^>]*>/gi, '');   // Cut off span html
+        info = info.replace(/<\/span>/gi, '');
+        info = info.replace(/ /g, '');
+
+        return info;
+    }
+
+    function extractDesc(html) {
+        let desc = html.match(/<span\sid="job-description-[\s\S]*<\/span>/)[0];
+
+        let fullDesc = desc.match(/data-original-text="(.*?)">/)[0];
+        fullDesc = fullDesc.replace(/<b>/g, '');
+        fullDesc = fullDesc.replace(/<\/b>/g, '');
+        fullDesc = fullDesc.slice(19)
+
+        return fullDesc
+    }
     
-    html.map((x) => {
-        let vacancy = {
-            title: extractTitle(x),
-            link: extractLink(x),
-            description: extractDesc(x)
-        };
-        //console.log("Title: ", extractTitle(x));
-        //console.log("Link: ", extractLink(x));
-        //console.log("Description: ", extractDesc(x));
-        vacancies.push(vacancy);
-    });
+    try {
+        let vacancies = [];
+    
+        html.map((x) => {
+            let vacancy = {
+                title: extractTitle(x),
+                link: extractLink(x),
+                short_info: extractInfo(x),
+                desc: extractDesc(x) 
+            };
+    
+            vacancies.push(vacancy);
+        });
 
-    console.log(vacancies);
-}
+        return vacancies;
+    } catch(err) {
+        console.error(err);
+    }
+};
 
-// Return array of vacancy objects
-function findVacancies(category, exprerience) {
+async function findVacancies(category, exprerience, res) {
     let url = prepareLink(category, exprerience, 'https://djinni.co/jobs/')
     console.log('URL: ', url);
-    let html = parse(url);
-    html.then((result) => extractVacancies(result));
+    let html = await parse(url);
+    let result = extractVacancies(html);
+
+    let vacancies = [];
+    result.forEach((x) => vacancies.push(x));
+    res.json({ message: 'Vacancies finded successfully', vacancies: vacancies});    // Send vacancies to client
 }
 
 // Receive selected filters
 app.post('/selected', (req, res) => {
     let {category, exprerience} = req.body;
     console.log("Seleceted: ", category, " ", exprerience);
-    findVacancies(category, exprerience);
+
+    findVacancies(category, exprerience, res);
 });
 
 app.get('/', (req, res) => {

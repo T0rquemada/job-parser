@@ -1,11 +1,9 @@
 # Job parser (Djinni)
 
-*Parse job vacancies on [Djinni.co](https://djinni.co/jobs/)*
-
 ## To run locally
 1. Clone repo
 ```
-
+git clone https://github.com/T0rquemada/job-parser.git
 ```
 2. Install dependencies
 ```
@@ -16,3 +14,4 @@ npm install
 ```
 node server.js
 ```
+4. Open index.html

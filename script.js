@@ -1,13 +1,10 @@
 let selectedFilters = [];
 
 const body = document.body;
-let btn = document.createElement('button');
-btn.textContent = "Button";
+let searchBtn = document.getElementById('searchBtn');
 
-body.appendChild(btn);
-
-btn.addEventListener('click', () => {
-    console.log('btn clicked!')
+searchBtn.addEventListener('click', () => {
+    console.log('Start search vacancies');
     
     fetch('http://localhost:3000/selected', {
         method: 'POST',
@@ -17,8 +14,12 @@ btn.addEventListener('click', () => {
             exprerience: selectedFilters[1]
         }),
     })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+    })
     .catch(error => {
-        console.error('Fetch error:', error);
+        console.error('Fetch error while search vacancies:', error);
     });
 });
 

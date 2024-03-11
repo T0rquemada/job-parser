@@ -63,6 +63,24 @@ body {
     display: flex;
 }
 
+.searchBtn__container {
+    text-align: center;
+}
+
+#searchBtn {
+    margin-top: 2rem;
+    padding: 0.5rem 0.75rem;
+    color: #fff;
+    background-color: #000;
+    border: 1px solid #000;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#searchBtn:hover {
+    border: 1px solid #fff;
+}
+
 #vacancy__section {
     width: 70%;
     padding: 2rem 8rem;
@@ -86,6 +104,7 @@ body {
 
 @media (max-width: 45rem) {
     .container {
+        padding: 0.5rem;
         flex-direction: column;
         justify-content: center;
     }
