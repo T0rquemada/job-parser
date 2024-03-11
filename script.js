@@ -1,7 +1,32 @@
 let selectedFilters = [];
 
-const body = document.body;
-let searchBtn = document.getElementById('searchBtn');
+const vacanciesList = document.getElementById('vacancy__section');
+const searchBtn = document.getElementById('searchBtn');
+
+
+function createVacancyItem(vacancy) {
+    let container = document.createElement('div');
+    container.className = 'vacancy';
+
+    let title = document.createElement('a');
+    title.setAttribute('href', vacancy.link);
+    title.className = 'vacancy__title';
+    title.textContent = vacancy.title;
+
+    let shortInfo = document.createElement('div');
+    shortInfo.className = 'vacancy__short__desc-info';
+    shortInfo.textContent = vacancy.short_info;
+
+    let desc = document.createElement('div');
+    desc.className = 'vacancy__desc';
+    desc.textContent = vacancy.desc;
+
+    container.appendChild(title);
+    container.appendChild(shortInfo);
+    container.appendChild(desc);
+
+    vacanciesList.appendChild(container);
+}
 
 searchBtn.addEventListener('click', () => {
     console.log('Start search vacancies');
@@ -16,7 +41,11 @@ searchBtn.addEventListener('click', () => {
     })
     .then(response => response.json())
     .then(data => {
-      console.log(data);
+        const vacancies = data.vacancies;
+        vacanciesList.textContent = ''; // Clear list 
+        vacancies.forEach((x) => {
+            createVacancyItem(x);
+        });
     })
     .catch(error => {
         console.error('Fetch error while search vacancies:', error);

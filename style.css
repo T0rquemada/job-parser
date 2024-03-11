@@ -82,11 +82,16 @@ body {
 }
 
 #vacancy__section {
-    width: 70%;
-    padding: 2rem 8rem;
+    width: 80%;
+    padding: 2rem;
+}
+
+.vacancy {
+    margin-top: 1rem;
 }
 
 .vacancy__title {
+    width: 70%;
     margin: 0.5rem 0;
     display: block;
     color: rgb(72, 72, 158);
@@ -94,24 +99,33 @@ body {
     font-weight: 700;
 }
 
-.vacancy__short__desc {
+.vacancy__short__desc-info {
     font-weight: 500;
 }
 
 .vacancy__desc {
     margin: 0.5rem 0;
+    width: 70%;
 }
 
-@media (max-width: 45rem) {
+@media (max-width: 64rem) {
     .container {
         padding: 0.5rem;
         flex-direction: column;
         justify-content: center;
     }
     
-    #vacancy__section {
-        padding: 1rem;
+    .selectors__section {
+        order: -1;
+    }
 
+    #vacancy__section {
+        width: 100%;
+        padding: 1rem;
+    }
+
+    .vacancy__desc {
+        max-width: 90%;
     }
 
     #Categories>div {
