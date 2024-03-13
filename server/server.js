@@ -123,6 +123,7 @@ function extractVacancies(html) {
     }
 };
 
+// Send vacancies to client
 async function findVacancies(category, exprerience, res) {
     let url = prepareLink(category, exprerience, 'https://djinni.co/jobs/')
     console.log('URL: ', url);
