@@ -30,6 +30,7 @@ function createVacancyItem(vacancy) {
 
 searchBtn.addEventListener('click', () => {
     console.log('Start search vacancies');
+    vacanciesList.textContent = 'Wait, while we search vacancies...';
     
     fetch('http://localhost:3000/selected', {
         method: 'POST',
@@ -108,4 +109,3 @@ const five__years = document.getElementById('5y');
 
 let expreriences = [noexp, one__year, two__years, three__years, five__years];
 AddSelectHandler(expreriences);
-
