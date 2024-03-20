@@ -83,23 +83,33 @@ function selectItem(selected_item, item_list) {
 }
 
 // Adds event listeners on every category
-function AddSelectHandler(items) {
-    items.map((item) => {
-        item.addEventListener('click', () => {
-            selectItem(item, items);
-        });
+function AddSelectHandler(item, item_list) {
+    item.addEventListener('click', () => {
+        selectItem(item, item_list);
     });
 }
 
 const js = document.getElementById('JavaScript');
 const fullstack = document.getElementById('Fullstack');
 const java = document.getElementById('Java');
+const dotnet = document.getElementById('.NET');
 const nodejs = document.getElementById('Node.js');
 const python = document.getElementById('Python');
+const php = document.getElementById('PHP');
+const ios = document.getElementById('iOS');
+const android = document.getElementById('Android');
 const c = document.getElementById('C%2B%2B');
+const flutter = document.getElementById('Flutter');
+const ruby = document.getElementById('Ruby');
+const scala = document.getElementById('Scala');
+const go = document.getElementById('Golang');
+const rust = document.getElementById('Rust');
 
-let categories = [js, fullstack, java, python, nodejs,  c];
-AddSelectHandler(categories);
+let categories = [js, fullstack, java, dotnet, python, php, ios, android, nodejs, c, flutter, ruby, go, scala, rust];
+categories.map((item) => {
+    AddSelectHandler(item, categories);
+});
+
 
 const noexp = document.getElementById('no_exp');
 const one__year = document.getElementById('1y');
@@ -108,4 +118,6 @@ const three__years = document.getElementById('3y');
 const five__years = document.getElementById('5y');
 
 let expreriences = [noexp, one__year, two__years, three__years, five__years];
-AddSelectHandler(expreriences);
+expreriences.map((item) => {
+    AddSelectHandler(item, expreriences);
+});
